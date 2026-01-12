@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파이썬 문법 도우미</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Prepaid font for better look -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+</head>
+
+<body>
+    <div class="app-container">
+        <header>
+            <h1>🐍 파이썬 문법 도우미 🎍</h1>
+            <p>새해 복 많이 받으세요! 스스로 해답을 찾아가는 코딩 여행</p>
+        </header>
+
+        <div id="chat-container">
+            <div class="message ai">
+                안녕하세요! 파이썬 문법 도우미예요. 🙇‍♂️<br>
+                코딩하다 막히는 부분이 있나요? <br>
+                정답을 바로 알려드리는 대신, 스스로 해결할 수 있도록 도와드릴게요!
+            </div>
+            <div class="typing-indicator" id="loading">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="궁금한 파이썬 문법을 물어보세요..." autocomplete="off">
+            <button id="send-btn">
+                <svg viewBox="0 0 24 24">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

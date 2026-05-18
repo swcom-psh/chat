@@ -9,7 +9,7 @@ const appContainer = document.querySelector('.app-container');
 // ⚙️ 환경 설정 (선생님이 직접 입력해야 하는 부분)
 // ==========================================
 // 1. Google Cloud - OAuth 클라이언트 ID
-const GOOGLE_CLIENT_ID = "여기에_구글_클라이언트_ID를_입력하세요.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "455099474641-0j7codhi77g21tg778s8j54lqb69ple9.apps.googleusercontent.com";
 
 // 2. Google Apps Script - 웹앱 URL
 const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwzeZipzrMKJ3fepJi9oHuMLnwXNaJUH6UDhKMF66J-Z2gEmOlnrqxmSBeFlNeXewupMA/exec";

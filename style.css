@@ -142,6 +142,25 @@ header p {
     border-color: var(--primary-red);
 }
 
+#attach-btn {
+    background: transparent;
+    color: #5d4037;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#attach-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--primary-red);
+}
+
 #send-btn {
     background: var(--primary-red);
     color: white;
@@ -229,4 +248,111 @@ header p {
 #chat-container::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.1);
     border-radius: 4px;
+}
+
+/* Markdown formatting in chat */
+.message.ai pre {
+    background-color: #f4f4f4;
+    padding: 10px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 1px solid #e0e0e0;
+    margin: 10px 0;
+}
+
+.message.ai code {
+    font-family: 'Consolas', 'Monaco', monospace;
+    background-color: #f4f4f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+    color: #d32f2f;
+    font-size: 0.9em;
+}
+
+.message.ai pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #333;
+    border: none;
+}
+
+.message.ai p {
+    margin: 0 0 10px 0;
+}
+
+.message.ai p:last-child {
+    margin-bottom: 0;
+}
+
+.message.ai ul, .message.ai ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+/* Drag and Drop Overlay */
+.drag-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 24px;
+    border: 3px dashed var(--primary-red);
+}
+
+.drag-overlay.active {
+    display: flex;
+}
+
+.drag-content {
+    text-align: center;
+    color: var(--primary-red);
+    pointer-events: none; /* Prevent flickering on children */
+}
+
+.drag-content svg {
+    margin-bottom: 10px;
+}
+
+/* Login Screen */
+.login-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg-color);
+    background-image: radial-gradient(circle at 50% 50%, #fff3e0 0%, #fbe9e7 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.login-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.login-box h1 {
+    color: var(--primary-red);
+    margin-top: 0;
+}
+
+.login-box p {
+    color: #5d4037;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+#google-login-btn-container {
+    display: flex;
+    justify-content: center;
 }

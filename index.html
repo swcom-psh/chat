@@ -12,11 +12,30 @@
 </head>
 
 <body>
-    <div class="app-container">
+    <!-- 구글 로그인 화면 -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-box">
+            <h1>🐍 파이썬 튜터</h1>
+            <p>서울디지텍고등학교 계정으로 로그인해주세요.<br>(@sdhs.gwe.hs.kr)</p>
+            <div id="google-login-btn-container"></div>
+        </div>
+    </div>
+
+    <!-- 메인 앱 화면 (로그인 전에는 숨김) -->
+    <div class="app-container" style="display: none;">
         <header>
             <h1>🐍 파이썬 문법 도우미 🎍</h1>
             <p>새해 복 많이 받으세요! 스스로 해답을 찾아가는 코딩 여행</p>
         </header>
+
+        <div id="drag-overlay" class="drag-overlay">
+            <div class="drag-content">
+                <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <h2>여기에 파일을 놓아주세요</h2>
+                <p>CSV 또는 Excel 파일 지원</p>
+            </div>
+        </div>
+
 
         <div id="chat-container">
             <div class="message ai">
@@ -32,6 +51,10 @@
         </div>
 
         <div class="input-area">
+            <button id="attach-btn" title="파일 첨부 (CSV, 엑셀)">
+                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
+            </button>
+            <input type="file" id="file-input" accept=".csv, .xlsx, .xls" style="display: none;">
             <input type="text" id="user-input" placeholder="궁금한 파이썬 문법을 물어보세요..." autocomplete="off">
             <button id="send-btn">
                 <svg viewBox="0 0 24 24">
@@ -42,6 +65,12 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="script.js"></script>
 </body>
 

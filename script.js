@@ -306,16 +306,77 @@ async function fetchDataAnalysisGreeting(context, loadingMsgElement) {
 }
 
 // ==========================================
-// 💡 FAQ 사이드바 클릭 처리
+// 💡 FAQ 사이드바 클릭 처리 (API 미사용, 즉시 답변)
 // ==========================================
+const faqData = {
+    faq1: {
+        q: "판다스로 엑셀(Excel)이나 CSV 파일을 불러오는 방법(read_excel, read_csv)을 알려주세요.",
+        a: "데이터를 분석하려면 가장 먼저 파일을 불러와야겠죠? 📁\n\n판다스에서는 `read_csv`와 `read_excel` 함수를 사용합니다.\n\n### 기본 문법\n```python\nimport pandas as pd\n\n# CSV 파일 불러오기\ndf = pd.read_csv('파일명.csv')\n\n# 엑셀 파일 불러오기\ndf = pd.read_excel('파일명.xlsx')\n```\n\n한번 직접 자신이 가지고 있는 파일 이름으로 코드를 작성해 볼까요?"
+    },
+    faq2: {
+        q: "데이터프레임에서 특정 행이나 열을 선택할 때 사용하는 loc와 iloc의 차이점과 활용법을 설명해주세요.",
+        a: "특정 데이터를 콕 집어서 가져올 때 `loc`와 `iloc`를 사용합니다! 🎯\n\n- **`loc`**: 행/열의 **이름(라벨)**을 사용해서 가져옵니다.\n- **`iloc`**: 행/열의 **순서(숫자 인덱스)**를 사용해서 가져옵니다.\n\n### 기본 문법\n```python\n# 1. loc 활용 (이름 기준)\ndf.loc[행_조건, '열_이름']\n\n# 예: 나이가 15살 이상인 사람의 이름 찾기\ndf.loc[df['나이'] >= 15, '이름']\n\n# 2. iloc 활용 (숫자 기준)\ndf.iloc[0:3, 1]  # 0~2번째 행, 1번째 열 가져오기\n```\n\n어떤 조건으로 필터링을 하고 싶으신가요? 조건을 알려주시면 힌트를 드릴게요!"
+    },
+    faq3: {
+        q: "데이터를 그룹화해서 통계를 낼 때 사용하는 groupby 함수는 어떻게 쓰나요?",
+        a: "반별 평균, 성별 합계 등 **'~별'** 통계가 필요할 때는 `groupby`를 씁니다! 📊\n\n### 기본 문법\n```python\n# df.groupby('기준이_되는_열')['계산할_열'].통계함수()\n\n# 예: '반'별로 '수학' 점수의 평균 구하기\ndf.groupby('반')['수학'].mean()\n```\n\n여러분은 어떤 데이터를 기준으로 묶어서 통계를 내고 싶나요?"
+    },
+    faq4: {
+        q: "데이터의 평균(mean), 최솟값(min), 최댓값(max) 등 기본 통계를 구하는 방법을 알려주세요.",
+        a: "판다스에서는 데이터의 통계를 아주 쉽게 구할 수 있어요! 🧮\n\n### 자주 쓰는 통계 함수\n- `.mean()` : 평균\n- `.sum()` : 합계\n- `.max()` : 최댓값\n- `.min()` : 최솟값\n- `.count()` : 개수\n\n### 사용 예시\n```python\n# 특정 열의 평균 구하기\ndf['국어'].mean()\n```\n\n여러 함수를 한 번에 보고 싶다면 `df.describe()`를 사용하는 것도 좋은 방법이랍니다! 궁금한 점이 있나요?"
+    },
+    faq5: {
+        q: "기존 데이터프레임에 새로운 열(Column)을 추가하거나 이름을 변경하는 방법을 알려주세요.",
+        a: "데이터에 새로운 정보를 추가하거나 이름을 바꿀 수 있어요! 🏷️\n\n### 1. 새로운 열 추가하기\n새로운 열을 선언하고, 계산식을 넣어주면 됩니다.\n```python\n# '총점'이라는 새로운 열 만들기\ndf['총점'] = df['국어'] + df['영어'] + df['수학']\n```\n\n### 2. 열 이름 변경하기\n`rename` 함수를 사용합니다.\n```python\n# '국어' 열을 '국어점수'로 바꾸기\ndf.rename(columns={'국어': '국어점수'}, inplace=True)\n```\n\n어떤 열을 새로 만들고 싶으신가요?"
+    },
+    faq6: {
+        q: "데이터프레임에 비어있는 값(결측치)이 있는지 확인하고, 이를 처리하는 방법을 알려주세요.",
+        a: "실제 데이터에는 값이 비어있는 경우(NaN)가 많습니다. 이를 결측치라고 해요! 🧹\n\n### 1. 결측치 확인하기\n```python\ndf.isnull().sum()  # 각 열마다 비어있는 값의 개수 확인\n```\n\n### 2. 결측치 지우기 (dropna)\n```python\ndf.dropna()  # 비어있는 값이 하나라도 있는 행을 모두 삭제\n```\n\n### 3. 결측치 채우기 (fillna)\n```python\ndf.fillna(0)  # 비어있는 값을 0으로 채우기\n```\n\n여러분의 데이터에는 빈칸이 얼마나 있나요?"
+    },
+    faq7: {
+        q: "특정 열(Column)을 기준으로 데이터를 오름차순이나 내림차순으로 정렬(sort_values)하는 방법을 알려주세요.",
+        a: "데이터를 순위대로 줄 세우고 싶을 땐 `sort_values`를 사용합니다! 🏅\n\n### 기본 문법\n```python\n# 오름차순 정렬 (작은 수부터)\ndf.sort_values(by='성적')\n\n# 내림차순 정렬 (큰 수부터) - ascending=False 추가!\ndf.sort_values(by='성적', ascending=False)\n```\n\n어떤 데이터를 기준으로 1등부터 줄을 세워보고 싶나요?"
+    },
+    faq8: {
+        q: "두 개의 데이터프레임을 하나로 합치는 merge와 concat의 사용법을 알려주세요.",
+        a: "데이터가 여러 파일로 나뉘어 있을 때, 이를 하나로 합치는 것은 매우 중요합니다! 🧩\n\n### 1. 세로 또는 가로로 붙이기 (concat)\n- 블록을 위아래나 양옆으로 이어 붙이는 느낌이에요.\n```python\npd.concat([df1, df2])  # 위아래로 합치기\n```\n\n### 2. 공통된 열(Key)을 기준으로 합치기 (merge)\n- 엑셀의 VLOOKUP과 비슷한 역할이에요.\n```python\npd.merge(df1, df2, on='학번', how='inner')  # '학번'을 기준으로 병합\n```\n\n합치고 싶은 두 데이터에는 어떤 공통된 열이 있나요?"
+    },
+    faq9: {
+        q: "데이터프레임의 전체 행/열 개수, 데이터 타입, 요약 통계 등을 한눈에 확인하는 방법을 알려주세요.",
+        a: "데이터를 처음 불러왔을 때, 어떤 데이터인지 파악하는 기초 함수들입니다! 🔍\n\n### 기본 파악 함수\n- `df.head(5)` : 앞에서부터 5개 행만 살짝 엿보기\n- `df.info()` : 행과 열의 개수, 각 열의 데이터 타입, 결측치 여부 확인\n- `df.describe()` : 숫자형 데이터의 요약 통계(평균, 최소/최대 등) 한눈에 보기\n\n제일 먼저 `df.info()`를 실행해서 데이터를 파악해보는 것을 추천합니다!"
+    },
+    faq10: {
+        q: "특정 열에서 원하는 문자열이 포함된 데이터만 찾아서 필터링하는 방법을 알려주세요.",
+        a: "텍스트 데이터에서 특정 단어가 들어간 행만 쏙 골라낼 수 있어요! 🔎\n\n`str.contains()` 함수를 사용하면 됩니다.\n\n### 사용 예시\n```python\n# '이름' 열에 '김'이라는 글자가 포함된 행 찾기\ncondition = df['이름'].str.contains('김')\ndf[condition]\n```\n\n어떤 단어가 포함된 데이터를 찾고 싶으신가요?"
+    }
+};
+
 const faqItems = document.querySelectorAll('.faq-list li');
 
 faqItems.forEach(item => {
     item.addEventListener('click', () => {
-        const questionText = item.getAttribute('data-question');
-        if (questionText) {
-            userInput.value = questionText;
-            handleSend();
+        const faqId = item.getAttribute('data-faq-id');
+        if (faqId && faqData[faqId]) {
+            // 사용자 질문 추가
+            appendMessage(faqData[faqId].q, 'user');
+            
+            // 대화 기록에 사용자 질문 추가
+            conversationHistory.push({
+                role: "user",
+                content: faqData[faqId].q
+            });
+
+            // 즉시 AI 답변 추가 (API 호출 없이)
+            appendMessage(faqData[faqId].a, 'ai');
+            
+            // 대화 기록에 AI 답변 추가
+            conversationHistory.push({
+                role: "assistant",
+                content: faqData[faqId].a
+            });
+            
+            // 모바일 화면일 경우를 대비해 채팅창으로 스크롤 이동
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
     });
 });

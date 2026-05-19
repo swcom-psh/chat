@@ -88,6 +88,19 @@ body {
     margin: 0;
 }
 
+.faq-category {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #5d4037;
+    margin: 15px 0 8px 5px;
+    padding-bottom: 4px;
+    border-bottom: 2px solid rgba(211, 47, 47, 0.2);
+}
+
+.faq-category:first-child {
+    margin-top: 5px;
+}
+
 .faq-list li {
     padding: 12px 15px;
     margin-bottom: 8px;

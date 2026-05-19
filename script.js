@@ -348,6 +348,26 @@ const faqData = {
     faq10: {
         q: "특정 열에서 원하는 문자열이 포함된 데이터만 찾아서 필터링하는 방법을 알려주세요.",
         a: "텍스트 데이터에서 특정 단어가 들어간 행만 쏙 골라낼 수 있어요! 🔎\n\n`str.contains()` 함수를 사용하면 됩니다.\n\n### 사용 예시\n```python\n# '이름' 열에 '김'이라는 글자가 포함된 행 찾기\ncondition = df['이름'].str.contains('김')\ndf[condition]\n```\n\n어떤 단어가 포함된 데이터를 찾고 싶으신가요?"
+    },
+    faq11: {
+        q: "Plotly Express를 이용해서 산점도(Scatter Plot, 점 그래프)를 그리는 방법을 알려주세요.",
+        a: "산점도는 두 데이터 간의 관계를 점으로 표현할 때 사용합니다! 🔵\n\n### 기본 문법\n```python\nimport plotly.express as px\n\n# x축과 y축에 넣을 열 이름 지정\nfig = px.scatter(df, x='수학', y='영어', color='성별', title='수학/영어 성적 산점도')\nfig.show()\n```\n`color` 옵션을 사용하면 특정 열을 기준으로 색상을 다르게 칠할 수 있어요!"
+    },
+    faq12: {
+        q: "Plotly Express를 이용해서 선 그래프(Line Chart)를 그리는 방법을 알려주세요.",
+        a: "시간의 흐름에 따른 변화(예: 연도별 기온 변화)를 볼 때는 선 그래프가 최고예요! 📈\n\n### 기본 문법\n```python\nimport plotly.express as px\n\nfig = px.line(df, x='연도', y='기온', title='연도별 기온 변화')\nfig.show()\n```\n데이터가 시간 순서대로 정렬되어 있어야 그래프가 예쁘게 그려진답니다!"
+    },
+    faq13: {
+        q: "Plotly Express를 이용해서 막대 그래프(Bar Chart)를 그리는 방법을 알려주세요.",
+        a: "항목별 크기를 비교할 때(예: 과목별 평균 점수)는 막대 그래프를 주로 사용합니다! 📊\n\n### 기본 문법\n```python\nimport plotly.express as px\n\nfig = px.bar(df, x='과목', y='평균점수', title='과목별 평균 점수 비교')\nfig.show()\n```\n막대를 가로로 눕히고 싶다면 `orientation='h'` 옵션을 추가하고 x와 y를 바꿔보세요!"
+    },
+    faq14: {
+        q: "Plotly Express를 이용해서 데이터의 분포를 보는 히스토그램(Histogram) 그리는 방법을 알려주세요.",
+        a: "데이터가 어떤 값에 얼마나 많이 몰려있는지(분포) 확인할 때는 히스토그램을 사용해요! 📉\n\n### 기본 문법\n```python\nimport plotly.express as px\n\nfig = px.histogram(df, x='점수', nbins=10, title='성적 분포도')\nfig.show()\n```\n`nbins` 옵션을 조절하면 막대의 개수(구간의 세밀함)를 바꿀 수 있습니다."
+    },
+    faq15: {
+        q: "Plotly Express를 이용해서 파이 차트(Pie Chart, 원형 그래프)를 그리는 방법을 알려주세요.",
+        a: "전체에서 각 항목이 차지하는 비율을 볼 때는 파이 차트가 훌륭하죠! 🍕\n\n### 기본 문법\n```python\nimport plotly.express as px\n\n# values에는 크기(숫자), names에는 항목(이름)을 넣습니다.\nfig = px.pie(df, values='인원수', names='반', title='반별 인원수 비율')\nfig.show()\n```\n구멍이 뚫린 도넛 모양으로 만들고 싶다면 `hole=0.3` 옵션을 추가해 보세요!"
     }
 };
 

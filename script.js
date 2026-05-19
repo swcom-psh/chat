@@ -304,3 +304,18 @@ async function fetchDataAnalysisGreeting(context, loadingMsgElement) {
         loadingMsgElement.innerHTML = "네트워크 오류가 발생했습니다.";
     }
 }
+
+// ==========================================
+// 💡 FAQ 사이드바 클릭 처리
+// ==========================================
+const faqItems = document.querySelectorAll('.faq-list li');
+
+faqItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const questionText = item.getAttribute('data-question');
+        if (questionText) {
+            userInput.value = questionText;
+            handleSend();
+        }
+    });
+});

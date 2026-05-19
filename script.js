@@ -63,7 +63,7 @@ function handleCredentialResponse(response) {
     loginScreen.style.display = 'none';
     appContainer.style.display = 'flex';
     
-    appendMessage(`환영합니다, **${name}**(${studentId}) 학생! 👋\n무엇을 도와드릴까요?`, 'ai');
+    appendMessage(`환영합니다, **${name}**(${studentId}) 학생! 👋\n시원한 바다처럼 파이썬 고민을 해결해 드릴게요!`, 'ai');
 }
 
 function decodeJwtResponse(token) {
@@ -311,7 +311,7 @@ async function fetchDataAnalysisGreeting(context, loadingMsgElement) {
 const faqData = {
     faq1: {
         q: "판다스로 엑셀(Excel)이나 CSV 파일을 불러오는 방법(read_excel, read_csv)을 알려주세요.",
-        a: "데이터를 분석하려면 가장 먼저 파일을 불러와야겠죠? 📁\n\n판다스에서는 `read_csv`와 `read_excel` 함수를 사용합니다.\n\n### 기본 문법\n```python\nimport pandas as pd\n\n# CSV 파일 불러오기\ndf = pd.read_csv('파일명.csv')\n\n# 엑셀 파일 불러오기\ndf = pd.read_excel('파일명.xlsx')\n```\n\n한번 직접 자신이 가지고 있는 파일 이름으로 코드를 작성해 볼까요?"
+        a: "데이터를 분석하려면 가장 먼저 파일을 불러와야겠죠? 📁\n\n판다스에서는 `read_csv`와 `read_excel` 함수를 사용합니다.\n\n### 기본 문법\n```python\nimport pandas as pd\n\n# CSV 파일 불러오기 (한글이 깨질 때 encoding 옵션 사용!)\ndf = pd.read_csv('파일명.csv', encoding='cp949') # 또는 'utf-8'\n\n# 엑셀 파일 불러오기 (첫 번째 줄이 열 이름이 아닐 때 header 옵션 사용!)\ndf = pd.read_excel('파일명.xlsx', header=1) # 1번째 인덱스(두 번째 줄)를 열 이름으로 지정\n```\n\n`header=None`을 주면 열 이름 없이 데이터를 불러올 수도 있답니다!"
     },
     faq2: {
         q: "데이터프레임에서 특정 행이나 열을 선택할 때 사용하는 loc와 iloc의 차이점과 활용법을 설명해주세요.",
@@ -351,23 +351,23 @@ const faqData = {
     },
     faq11: {
         q: "Plotly Express를 이용해서 산점도(Scatter Plot, 점 그래프)를 그리는 방법을 알려주세요.",
-        a: "산점도는 두 데이터 간의 관계를 점으로 표현할 때 사용합니다! 🔵\n\n### 기본 문법\n```python\nimport plotly.express as px\n\n# x축과 y축에 넣을 열 이름 지정\nfig = px.scatter(df, x='수학', y='영어', color='성별', title='수학/영어 성적 산점도')\nfig.show()\n```\n`color` 옵션을 사용하면 특정 열을 기준으로 색상을 다르게 칠할 수 있어요!"
+        a: "산점도는 두 데이터 간의 관계를 점으로 표현할 때 사용합니다! 🔵\n\n### 다양한 속성 활용\n```python\nimport plotly.express as px\n\nfig = px.scatter(\n    df, \n    x='수학', y='영어', \n    color='성별',          # 성별에 따라 점 색상 다르게\n    symbol='학급',        # 학급에 따라 점 모양 다르게 (동그라미, 세모 등)\n    size='총점',          # 총점이 높을수록 점 크기 크게\n    hover_data=['이름'],   # 마우스를 올렸을 때 '이름' 데이터도 표시\n    title='수학/영어 성적 산점도'\n)\nfig.show()\n```\n이렇게 여러 옵션을 조합하면 훨씬 풍성하고 예쁜 시각화가 가능해요!"
     },
     faq12: {
         q: "Plotly Express를 이용해서 선 그래프(Line Chart)를 그리는 방법을 알려주세요.",
-        a: "시간의 흐름에 따른 변화(예: 연도별 기온 변화)를 볼 때는 선 그래프가 최고예요! 📈\n\n### 기본 문법\n```python\nimport plotly.express as px\n\nfig = px.line(df, x='연도', y='기온', title='연도별 기온 변화')\nfig.show()\n```\n데이터가 시간 순서대로 정렬되어 있어야 그래프가 예쁘게 그려진답니다!"
+        a: "시간의 흐름에 따른 변화(예: 연도별 기온 변화)를 볼 때는 선 그래프가 최고예요! 📈\n\n### 다양한 속성 활용\n```python\nimport plotly.express as px\n\nfig = px.line(\n    df, \n    x='연도', y='기온', \n    color='도시',          # 도시별로 선 색상 다르게 (여러 개의 선 생성)\n    markers=True,         # 선 중간중간에 데이터 포인트를 점(마커)으로 표시\n    line_dash='도시',      # 도시에 따라 선 종류 다르게 (점선, 실선 등)\n    title='도시별 연도별 기온 변화'\n)\nfig.show()\n```\n선에 마커(markers)를 추가하면 값이 있는 위치를 정확히 알 수 있어서 좋아요!"
     },
     faq13: {
         q: "Plotly Express를 이용해서 막대 그래프(Bar Chart)를 그리는 방법을 알려주세요.",
-        a: "항목별 크기를 비교할 때(예: 과목별 평균 점수)는 막대 그래프를 주로 사용합니다! 📊\n\n### 기본 문법\n```python\nimport plotly.express as px\n\nfig = px.bar(df, x='과목', y='평균점수', title='과목별 평균 점수 비교')\nfig.show()\n```\n막대를 가로로 눕히고 싶다면 `orientation='h'` 옵션을 추가하고 x와 y를 바꿔보세요!"
+        a: "항목별 크기를 비교할 때(예: 과목별 평균 점수)는 막대 그래프를 주로 사용합니다! 📊\n\n### 다양한 속성 활용\n```python\nimport plotly.express as px\n\nfig = px.bar(\n    df, \n    x='과목', y='평균점수', \n    color='성별',          # 성별로 색상을 나눠서 누적 막대(Stacked bar) 생성\n    barmode='group',      # 누적하지 않고 옆으로 나란히 배치하고 싶을 때 사용!\n    text='평균점수',       # 막대 위에 점수 숫자 직접 표시\n    orientation='v',      # 가로 막대로 바꾸고 싶다면 'h'로 설정 (이때 x와 y 반대로!)\n    title='과목별 남녀 평균 점수 비교'\n)\nfig.update_traces(textposition='outside') # 글자를 막대 바깥에 표시\nfig.show()\n```\n누적 막대(`barmode='stack'`)와 그룹 막대(`barmode='group'`)를 비교해보세요!"
     },
     faq14: {
         q: "Plotly Express를 이용해서 데이터의 분포를 보는 히스토그램(Histogram) 그리는 방법을 알려주세요.",
-        a: "데이터가 어떤 값에 얼마나 많이 몰려있는지(분포) 확인할 때는 히스토그램을 사용해요! 📉\n\n### 기본 문법\n```python\nimport plotly.express as px\n\nfig = px.histogram(df, x='점수', nbins=10, title='성적 분포도')\nfig.show()\n```\n`nbins` 옵션을 조절하면 막대의 개수(구간의 세밀함)를 바꿀 수 있습니다."
+        a: "데이터가 어떤 값에 얼마나 많이 몰려있는지(분포) 확인할 때는 히스토그램을 사용해요! 📉\n\n### 다양한 속성 활용\n```python\nimport plotly.express as px\n\nfig = px.histogram(\n    df, \n    x='점수', \n    nbins=20,             # 막대의 개수(구간의 세밀함) 지정\n    color='합격여부',       # 합격/불합격에 따라 색상 나누기\n    marginal='box',       # 그래프 위쪽에 박스 플롯(box plot) 추가 표시 (violin, rug 등 가능)\n    text_auto=True,       # 각 막대 위에 개수 숫자 자동 표시\n    title='전체 학생 성적 분포도'\n)\nfig.show()\n```\n`marginal` 속성을 쓰면 하나의 그래프 안에서 여러 통계 정보를 동시에 볼 수 있답니다!"
     },
     faq15: {
         q: "Plotly Express를 이용해서 파이 차트(Pie Chart, 원형 그래프)를 그리는 방법을 알려주세요.",
-        a: "전체에서 각 항목이 차지하는 비율을 볼 때는 파이 차트가 훌륭하죠! 🍕\n\n### 기본 문법\n```python\nimport plotly.express as px\n\n# values에는 크기(숫자), names에는 항목(이름)을 넣습니다.\nfig = px.pie(df, values='인원수', names='반', title='반별 인원수 비율')\nfig.show()\n```\n구멍이 뚫린 도넛 모양으로 만들고 싶다면 `hole=0.3` 옵션을 추가해 보세요!"
+        a: "전체에서 각 항목이 차지하는 비율을 볼 때는 파이 차트가 훌륭하죠! 🍕\n\n### 다양한 속성 활용\n```python\nimport plotly.express as px\n\n# values에는 크기(숫자), names에는 항목(이름)을 넣습니다.\nfig = px.pie(\n    df, \n    values='인원수',       # 파이 크기를 결정할 숫자 데이터\n    names='반',           # 파이를 나눌 범주 데이터\n    hole=0.4,             # 가운데 구멍을 뚫어서 도넛(Donut) 차트로 만들기 (0~1 사이 값)\n    title='반별 인원수 비율'\n)\nfig.update_traces(textposition='inside', textinfo='percent+label') # 파이 안쪽에 비율과 라벨 표시\nfig.show()\n```\n가운데 구멍을 뚫은 도넛 차트가 디자인적으로 훨씬 깔끔해 보이는 경우가 많아요!"
     }
 };
 

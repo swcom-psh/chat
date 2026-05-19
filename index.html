@@ -15,7 +15,7 @@
     <!-- 구글 로그인 화면 -->
     <div id="login-screen" class="login-screen">
         <div class="login-box">
-            <h1>🐍 파이썬 튜터</h1>
+            <h1>🌊 파이썬 코딩 바다</h1>
             <p>강원사대부고 계정으로 로그인해주세요.<br>(@sdhs.gwe.hs.kr)</p>
             <div id="google-login-btn-container"></div>
         </div>
@@ -53,8 +53,8 @@
 
         <div class="main-content">
             <header>
-                <h1>🐍 파이썬 문법 도우미 🎍</h1>
-                <p>새해 복 많이 받으세요! 스스로 해답을 찾아가는 코딩 여행</p>
+                <h1>🌊 파이썬 코딩 바다 🏄‍♂️</h1>
+                <p>파도처럼 시원하게 파이썬 고민을 해결해 드려요!</p>
             </header>
 
         <div id="drag-overlay" class="drag-overlay">
@@ -73,7 +73,7 @@
 
         <div id="chat-container">
             <div class="message ai">
-                안녕하세요! 파이썬 문법 도우미예요. 🙇‍♂️<br>
+                안녕하세요! 파이썬 코딩 바다에 오신 것을 환영해요. 🌴<br>
                 코딩하다 막히는 부분이 있나요? <br>
                 정답을 바로 알려드리는 대신, 스스로 해결할 수 있도록 도와드릴게요!
             </div>
@@ -102,6 +102,21 @@
                 </svg>
             </button>
         </div>
+    </div>
+
+    <!-- 파도 애니메이션 SVG -->
+    <div class="ocean-container">
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            <defs>
+                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(0, 180, 216, 0.7)" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(0, 119, 182, 0.5)" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(3, 4, 94, 0.3)" />
+                <use xlink:href="#gentle-wave" x="48" y="7" fill="#0077b6" />
+            </g>
+        </svg>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

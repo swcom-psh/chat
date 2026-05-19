@@ -1,20 +1,20 @@
 :root {
-    --bg-color: #fdf6e3;
-    --primary-red: #d32f2f;
-    --primary-red-hover: #b71c1c;
-    --gold-accent: #ffca28;
-    --text-color: #3e2723;
-    --chat-bg-user: #ffccbc;
+    --bg-color: #caf0f8;
+    --primary-red: #0077b6; /* Used as primary blue now */
+    --primary-red-hover: #03045e;
+    --gold-accent: #ffb703;
+    --text-color: #03045e;
+    --chat-bg-user: #e0fbfc;
     --chat-bg-ai: #ffffff;
     --glass-bg: rgba(255, 255, 255, 0.7);
     --glass-border: rgba(255, 255, 255, 0.5);
-    --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --shadow: 0 8px 32px 0 rgba(0, 119, 182, 0.15);
 }
 
 body {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
     background-color: var(--bg-color);
-    background-image: radial-gradient(circle at 50% 50%, #fff3e0 0%, #fbe9e7 100%);
+    background-image: radial-gradient(circle at 50% 50%, #e0fbfc 0%, #caf0f8 100%);
     color: var(--text-color);
     margin: 0;
     height: 100vh;
@@ -369,6 +369,113 @@ header p {
 }
 
 .message.ai p:last-child {
+    margin-bottom: 0;
+}
+
+.message.ai ul, .message.ai ol {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+/* Drag and Drop Overlay */
+.drag-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: 24px;
+    border: 3px dashed var(--primary-red);
+}
+
+.drag-overlay.active {
+    display: flex;
+}
+
+.drag-content {
+    text-align: center;
+    color: var(--primary-red);
+    pointer-events: none; /* Prevent flickering on children */
+}
+
+.drag-content svg {
+    margin-bottom: 10px;
+}
+
+/* Login Screen */
+.login-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--bg-color);
+    background-image: radial-gradient(circle at 50% 50%, #e0fbfc 0%, #caf0f8 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.login-box {
+    background: var(--glass-bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.login-box h1 {
+    color: var(--primary-red);
+    margin-top: 0;
+}
+
+.login-box p {
+    color: #03045e;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+#google-login-btn-container {
+    display: flex;
+    justify-content: center;
+}
+
+/* Ocean Waves Animation */
+.ocean-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 15vh;
+    min-height: 100px;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.waves {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-bottom: -7px; /* Fix for safari gap */
+}
+
+.parallax > use {
+    animation: move-forever 25s cubic-bezier(.55,.5,.45,.5) infinite;
+}
+.parallax > use:nth-child(1) { animation-delay: -2s; animation-duration: 7s; }
+.parallax > use:nth-child(2) { animation-delay: -3s; animation-duration: 10s; }
+.parallax > use:nth-child(3) { animation-delay: -4s; animation-duration: 13s; }
+.parallax > use:nth-child(4) { animation-delay: -5s; animation-duration: 20s; }
+
+@keyframes move-forever {
+    0% { transform: translate3d(-90px,0,0); }
+    100% { transform: translate3d(85px,0,0); }
+}
     margin-bottom: 0;
 }
 

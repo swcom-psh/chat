@@ -157,31 +157,37 @@ function renderMarkdown(element, text) {
 function addCopyButtons(container) {
     const preElements = container.querySelectorAll('pre');
     preElements.forEach(pre => {
-        const codeElement = pre.querySelector('code');
-        if (codeElement) {
-            if (pre.querySelector('.copy-btn')) return;
+        if (pre.querySelector('.copy-btn')) return;
 
-            const copyBtn = document.createElement('button');
-            copyBtn.classList.add('copy-btn');
-            copyBtn.textContent = '복사';
-            
-            copyBtn.addEventListener('click', async () => {
-                try {
-                    await navigator.clipboard.writeText(codeElement.textContent);
-                    copyBtn.textContent = '완료!';
-                    copyBtn.classList.add('copied');
-                    setTimeout(() => {
-                        copyBtn.textContent = '복사';
-                        copyBtn.classList.remove('copied');
-                    }, 2000);
-                } catch (err) {
-                    console.error('복사 실패:', err);
-                    copyBtn.textContent = '실패';
+        const copyBtn = document.createElement('button');
+        copyBtn.classList.add('copy-btn');
+        copyBtn.textContent = '복사';
+        
+        copyBtn.addEventListener('click', async () => {
+            try {
+                let textToCopy = '';
+                const codeElement = pre.querySelector('code');
+                if (codeElement) {
+                    textToCopy = codeElement.textContent;
+                } else {
+                    // 복사 버튼이 생기기 전의 텍스트 혹은 버튼 텍스트를 제외한 텍스트
+                    textToCopy = pre.textContent.replace('복사', '').replace('완료!', '').trim();
                 }
-            });
-            
-            pre.appendChild(copyBtn);
-        }
+                
+                await navigator.clipboard.writeText(textToCopy);
+                copyBtn.textContent = '완료!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => {
+                    copyBtn.textContent = '복사';
+                    copyBtn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                console.error('복사 실패:', err);
+                copyBtn.textContent = '실패';
+            }
+        });
+        
+        pre.appendChild(copyBtn);
     });
 }
 

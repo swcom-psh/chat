@@ -24,10 +24,9 @@ let currentUser = {
 // ==========================================
 // 🔐 구글 로그인 처리
 // ==========================================
-window.onload = function () {
-    if(GOOGLE_CLIENT_ID.includes("여기에_구글_클라이언트_ID를_입력하세요")) {
-        console.warn("구글 로그인 Client ID가 설정되지 않았습니다.");
-    }
+function initGoogleSignIn() {
+    const btnContainer = document.getElementById("google-login-btn-container");
+    if (!btnContainer || typeof google === 'undefined') return;
 
     // Google Identity Services 초기화
     google.accounts.id.initialize({
@@ -36,9 +35,30 @@ window.onload = function () {
         hosted_domain: "sdhs.gwe.hs.kr" // 이 도메인으로만 로그인 제한
     });
     google.accounts.id.renderButton(
-        document.getElementById("google-login-btn-container"),
+        btnContainer,
         { theme: "outline", size: "large", text: "signin_with" }
     );
+}
+
+window.onload = function () {
+    if(GOOGLE_CLIENT_ID.includes("여기에_구글_클라이언트_ID를_입력하세요")) {
+        console.warn("구글 로그인 Client ID가 설정되지 않았습니다.");
+    }
+
+    // Google SDK 라이브러리가 이미 로드되어 있으면 즉시 초기화
+    if (typeof google !== 'undefined') {
+        initGoogleSignIn();
+    } else {
+        // 아직 로드 전이라면 로드될 때까지 100ms마다 확인 (레이스 컨디션 해결)
+        const checkGoogleSDK = setInterval(() => {
+            if (typeof google !== 'undefined') {
+                initGoogleSignIn();
+                clearInterval(checkGoogleSDK);
+            }
+        }, 100);
+        // 최대 5초까지만 대기 후 타이머 제거 (안전 장치)
+        setTimeout(() => clearInterval(checkGoogleSDK), 5000);
+    }
 };
 
 // 로그인 성공 시 콜백

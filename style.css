@@ -338,14 +338,43 @@ header p {
     border-radius: 4px;
 }
 
-/* Markdown formatting in chat */
 .message.ai pre {
+    position: relative;
     background-color: #f4f4f4;
-    padding: 10px;
+    padding: 12px;
+    padding-top: 38px; /* 복사 버튼을 위한 여백 */
     border-radius: 8px;
     overflow-x: auto;
     border: 1px solid #e0e0e0;
     margin: 10px 0;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 119, 182, 0.1);
+    color: var(--primary-red);
+    border: 1px solid rgba(0, 119, 182, 0.2);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.copy-btn:hover {
+    background: var(--primary-red);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0, 119, 182, 0.2);
+}
+
+.copy-btn.copied {
+    background: #2ec4b6;
+    color: white;
+    border-color: #2ec4b6;
 }
 
 .message.ai code {

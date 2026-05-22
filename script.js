@@ -145,13 +145,53 @@ async function getGPTResponse(message) {
     }
 }
 
+function renderMarkdown(element, text) {
+    if (typeof marked !== 'undefined') {
+        element.innerHTML = marked.parse(text);
+        addCopyButtons(element);
+    } else {
+        element.textContent = text;
+    }
+}
+
+function addCopyButtons(container) {
+    const preElements = container.querySelectorAll('pre');
+    preElements.forEach(pre => {
+        const codeElement = pre.querySelector('code');
+        if (codeElement) {
+            if (pre.querySelector('.copy-btn')) return;
+
+            const copyBtn = document.createElement('button');
+            copyBtn.classList.add('copy-btn');
+            copyBtn.textContent = '복사';
+            
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(codeElement.textContent);
+                    copyBtn.textContent = '완료!';
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => {
+                        copyBtn.textContent = '복사';
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
+                } catch (err) {
+                    console.error('복사 실패:', err);
+                    copyBtn.textContent = '실패';
+                }
+            });
+            
+            pre.appendChild(copyBtn);
+        }
+    });
+}
+
 function appendMessage(text, sender) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message');
     messageDiv.classList.add(sender);
     
-    if (sender === 'ai' && typeof marked !== 'undefined') {
-        messageDiv.innerHTML = marked.parse(text);
+    if (sender === 'ai') {
+        renderMarkdown(messageDiv, text);
     } else {
         messageDiv.textContent = text;
     }
@@ -296,8 +336,7 @@ async function fetchDataAnalysisGreeting(context, loadingMsgElement) {
         const replyText = data.reply;
         conversationHistory.push({ role: "assistant", content: replyText });
 
-        if (typeof marked !== 'undefined') loadingMsgElement.innerHTML = marked.parse(replyText);
-        else loadingMsgElement.textContent = replyText;
+        renderMarkdown(loadingMsgElement, replyText);
         chatContainer.scrollTop = chatContainer.scrollHeight;
     } catch (error) {
         console.error(error);

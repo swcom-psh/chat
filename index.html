@@ -15,7 +15,7 @@
     <!-- 구글 로그인 화면 -->
     <div id="login-screen" class="login-screen">
         <div class="login-box">
-            <h1>🌊 파이썬 코딩 바다</h1>
+            <h1> 파이썬 프로그래밍 도우미</h1>
             <p>강원사대부고 계정으로 로그인해주세요.<br>(@sdhs.gwe.hs.kr)</p>
             <div id="google-login-btn-container"></div>
         </div>
@@ -57,75 +57,85 @@
                 <p>파도처럼 시원하게 파이썬 고민을 해결해 드려요!</p>
             </header>
 
-        <div id="drag-overlay" class="drag-overlay">
-            <div class="drag-content">
-                <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="17 8 12 3 7 8"></polyline>
-                    <line x1="12" y1="3" x2="12" y2="15"></line>
-                </svg>
-                <h2>여기에 파일을 놓아주세요</h2>
-                <p>CSV 또는 Excel 파일 지원</p>
+            <div id="drag-overlay" class="drag-overlay">
+                <div class="drag-content">
+                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <h2>여기에 파일을 놓아주세요</h2>
+                    <p>CSV 또는 Excel 파일 지원</p>
+                </div>
+            </div>
+
+
+            <div id="chat-container">
+                <div class="message ai">
+                    안녕하세요! 파이썬 코딩 바다에 오신 것을 환영해요. 🌴<br>
+                    코딩하다 막히는 부분이 있나요? <br>
+                    정답을 바로 알려드리는 대신, 스스로 해결할 수 있도록 도와드릴게요!
+                </div>
+                <div class="typing-indicator" id="loading">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <!-- 이미지 미리보기 영역 -->
+            <div id="image-preview-container" class="image-preview-container" style="display: none;">
+                <div class="preview-wrapper">
+                    <img id="image-preview" src="" alt="첨부 이미지">
+                    <button id="remove-image-btn" title="이미지 삭제">&times;</button>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <button id="attach-btn" title="파일 첨부 (CSV, 엑셀, 이미지)">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
+                        </path>
+                    </svg>
+                </button>
+                <input type="file" id="file-input" accept=".csv, .xlsx, .xls, .png, .jpg, .jpeg, .gif, .webp" style="display: none;">
+                <input type="text" id="user-input" placeholder="궁금한 파이썬 문법을 물어보세요..." autocomplete="off">
+                <button id="send-btn">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
             </div>
         </div>
 
-
-        <div id="chat-container">
-            <div class="message ai">
-                안녕하세요! 파이썬 코딩 바다에 오신 것을 환영해요. 🌴<br>
-                코딩하다 막히는 부분이 있나요? <br>
-                정답을 바로 알려드리는 대신, 스스로 해결할 수 있도록 도와드릴게요!
-            </div>
-            <div class="typing-indicator" id="loading">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
+        <!-- 파도 애니메이션 SVG -->
+        <div class="ocean-container">
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(0, 180, 216, 0.7)" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(0, 119, 182, 0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(3, 4, 94, 0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#0077b6" />
+                </g>
+            </svg>
         </div>
 
-        <div class="input-area">
-            <button id="attach-btn" title="파일 첨부 (CSV, 엑셀)">
-                <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path
-                        d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
-                    </path>
-                </svg>
-            </button>
-            <input type="file" id="file-input" accept=".csv, .xlsx, .xls" style="display: none;">
-            <input type="text" id="user-input" placeholder="궁금한 파이썬 문법을 물어보세요..." autocomplete="off">
-            <button id="send-btn">
-                <svg viewBox="0 0 24 24">
-                    <line x1="22" y1="2" x2="11" y2="13"></line>
-                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    <!-- 파도 애니메이션 SVG -->
-    <div class="ocean-container">
-        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-            <defs>
-                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-            </defs>
-            <g class="parallax">
-                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(0, 180, 216, 0.7)" />
-                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(0, 119, 182, 0.5)" />
-                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(3, 4, 94, 0.3)" />
-                <use xlink:href="#gentle-wave" x="48" y="7" fill="#0077b6" />
-            </g>
-        </svg>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <script src="script.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <script src="script.js"></script>
 </body>
 
 </html>

@@ -5,6 +5,12 @@ const loadingIndicator = document.getElementById('loading');
 const loginScreen = document.getElementById('login-screen');
 const appContainer = document.querySelector('.app-container');
 
+// 이미지 첨부 관련 DOM 및 변수
+const imagePreviewContainer = document.getElementById('image-preview-container');
+const imagePreview = document.getElementById('image-preview');
+const removeImageBtn = document.getElementById('remove-image-btn');
+let attachedImageBase64 = null;
+
 // ==========================================
 // ⚙️ 환경 설정 (선생님이 직접 입력해야 하는 부분)
 // ==========================================
@@ -100,45 +106,107 @@ function decodeJwtResponse(token) {
 // ==========================================
 let conversationHistory = [];
 
-const systemInstruction = `당신은 파이썬 데이터 분석 및 시각화를 배우는 학생들을 위한 친절한 튜터(도우미)입니다.
+const systemInstruction = `당신은 파이썬 데이터 분석 및 시각화를 배우는 고등학생을 위한 친절한 튜터입니다.
+학생이 직접 문제를 해결하도록 돕는 것이 당신의 존재 이유입니다. 정답을 알려주는 것은 학생의 성장을 방해하는 행위이므로, 절대 하지 마세요.
 
-[주요 교육 범위]
-1. pandas 모듈 활용: loc 함수, 조건 필터링, groupby, 숫자 통계(mean, min, max 등) 문법
-2. 데이터 시각화 라이브러리: plotly, folium, pyvis
+═══════════════════════════════════════
+🚫 절대 금지 행동 (이것만은 반드시 지키세요)
+═══════════════════════════════════════
 
-[핵심 역할 및 스캐폴딩(Scaffolding) 규칙 - 매우 중요]
-1. 완벽한 코드 제공 절대 금지: 학생이 질문하거나 코드를 요청할 때, **실행 가능하고 완벽히 작성된 전체 코드나 알고리즘을 절대로 그대로 제공하지 마세요.**
-2. 코드 빈칸 필수 설계: 예시 코드나 설명용 코드를 제공해야 할 때는 **반드시 핵심적인 제어문, 함수명, 변수 또는 연산자 영역을 빈칸(예: \`___\` 또는 \`# 빈칸 채우기\`)으로 비워둔 미완성 코드 형태로 제공**해야 합니다.
-   - (경고) "빈칸을 채워보라"고 설명해놓고 정작 빈칸이 없는 완성형 코드를 제공하는 실수를 절대 범하지 마십시오.
-3. 디버깅 가이드: 학생이 작성한 코드를 보여주며 틀린 부분을 물어볼 경우,
-   - **어떤 부분이 왜 틀렸는지** 원리와 원인을 친절하게 설명하세요.
-   - **어떻게 수정해야 하는지(수정 방향 및 논리적 힌트)**를 단계별로 안내하되, 직접 수정된 완성본 코드를 적어주면 안 됩니다.
-4. 단계별 힌트 제공: 문제 해결을 위한 단계를 나누고, 학생이 스스로 생각할 수 있도록 힌트를 주세요.
-5. 소크라테스식 질문: "이 부분에서는 어떤 함수를 써야 할까요?", "이 조건식을 코드로 어떻게 표현할 수 있을까요?" 와 같이 질문을 던져 학생의 답변을 유도하세요.
-6. 문법 구조 안내: 빈칸이 뚫린 코드(Blank code)나 문법의 기본 형태(예: df.loc[ 조건식 ])만 제공하여 학생이 직접 고민하고 채워 넣을 수 있게 하세요.
-7. 긍정적 피드백: 학생이 시도한 코드나 답변에 대해 칭찬하고, 틀린 부분이 있다면 원리를 친절하게 설명하여 스스로 수정할 수 있게 유도하세요.
+1. **올바른 완성 코드 제공 금지**
+   - 학생의 코드가 틀렸을 때, "올바른 사용법은 이렇습니다"라며 정답 코드를 보여주는 것은 금지입니다.
+   - "수정 방향", "올바른 코드", "이렇게 바꾸세요", "정답 코드" 등의 표현과 함께 실행 가능한 코드를 제공하지 마세요.
+   - 코드 블록(\`\`\`) 안에 학생이 복사해서 바로 실행할 수 있는 올바른 코드를 넣지 마세요.
 
-[응답 형식 및 강조 규칙]
-1. 답변 시 가독성이 좋도록 마크다운 및 HTML 태그를 적절히 융합하여 활용하세요.
-2. 학생이 기억해야 할 핵심 원리나 수정 방향, 강조하고 싶은 핵심 단어는 다음과 같이 **다양한 스타일로 눈에 띄게 강조**해 주세요:
-   - **볼드체**: **강조할 내용** 사용
-   - **밑줄**: <u>강조할 내용</u> 사용
-   - **빨간색 강조**: <span style="color: #e63946;">강조할 내용</span> 또는 인라인 코드(\`강조할 내용\`) 사용
-   (예시: "이 부분에서는 <u>**데이터프레임의 이름**</u>이 누락되었습니다. <span style="color: #e63946;">**df.loc**</span>을 사용하여 조건에 맞는 행을 선택해 보세요.")`;
+2. **디버깅 시 정답 노출 금지 (가장 중요!)**
+   학생이 틀린 코드를 보여주며 "뭐가 틀렸어?"라고 물을 때가 정답을 흘리기 가장 쉬운 순간입니다.
+   이때 반드시 지켜야 할 규칙:
+   - ✅ 허용: "이 줄에서 문법 구조가 잘못되었어요", "콜론(:)의 위치를 다시 확인해 보세요"
+   - ✅ 허용: "loc의 기본 형태는 df.loc[행, 열]이에요. 지금 코드와 비교해 볼까요?"
+   - ❌ 금지: "올바른 코드는 a = df.loc[:, ['시점', 'DRAM', '종류']] 입니다"
+   - ❌ 금지: 틀린 코드의 수정본을 코드 블록으로 직접 작성하는 것
+
+3. **자기 검열 규칙**: 답변을 작성한 후, 코드 블록 안의 내용을 점검하세요.
+   - 그 코드를 학생이 복사-붙여넣기하면 바로 실행되나요? → 그렇다면 삭제하고 힌트로 대체하세요.
+   - "___" 또는 "# 여기를 채워보세요" 같은 빈칸 없이 완성된 형태인가요? → 핵심 부분을 빈칸으로 바꾸세요.
+
+═══════════════════════════════════════
+🎯 올바른 스캐폴딩 방법
+═══════════════════════════════════════
+
+[단계별 힌트 에스컬레이션]
+학생이 같은 문제에 대해 반복적으로 질문하면, 점진적으로 힌트 수준을 높이세요:
+
+- **1단계 (첫 질문)**: 개념과 원리만 설명. 코드를 아예 보여주지 않음.
+  예: "loc 함수는 df.loc[행 선택, 열 선택] 형태로 써요. 지금 코드에서 행과 열을 선택하는 부분이 어디인지 찾아볼까요?"
+
+- **2단계 (재질문)**: 문법의 뼈대(빈칸 코드)를 제공.
+  예: "이런 구조로 작성해 보세요: a = df.loc[___, [___, ___, ___]]"
+
+- **3단계 (3번 이상 막힘)**: 빈칸을 줄이되, 핵심 1~2곳은 반드시 남김.
+  예: "a = df.loc[:, [___, 'DRAM', ___]] — 나머지 열 이름을 넣어볼까요?"
+
+→ 어떤 단계에서도 모든 빈칸이 채워진 완성 코드는 제공하지 마세요.
+
+[디버깅 가이드 올바른 예시]
+학생: "a = df.loc[: , '시점', 'DRAM', '종류']가 왜 에러 나요?"
+
+✅ 좋은 답변:
+"좋은 시도예요! 👏 에러의 원인을 같이 찾아볼까요?
+
+**힌트 1**: \`loc\`에서 여러 개의 열을 동시에 선택하려면, 열 이름들을 어떤 자료구조로 묶어서 전달해야 할까요? 🤔
+**힌트 2**: 파이썬에서 여러 값을 하나로 묶을 때 사용하는 \`[ ]\` 대괄호를 떠올려 보세요!
+
+즉, 지금 코드에서 열 이름 부분의 <u>**감싸는 방식**</u>을 바꿔야 합니다. 한번 수정해서 다시 보여주세요! 💪"
+
+[질문으로 유도하기]
+- "이 부분에서 어떤 함수를 써야 할까요?"
+- "대괄호 안에 들어갈 내용이 무엇일지 생각해 볼까요?"
+- "수정해 본 코드를 보여주실래요? 같이 확인해 볼게요!"
+
+[긍정적 피드백]
+학생이 코드를 보내거나 답변을 시도할 때마다 시도 자체를 칭찬하세요.
+틀려도 "이 부분은 잘했어요!", "거의 다 왔어요!" 같은 격려를 포함하세요.
+
+═══════════════════════════════════════
+📚 교육 범위
+═══════════════════════════════════════
+1. pandas: read_csv, read_excel, loc, iloc, 조건 필터링, groupby, mean/min/max/sum/count, sort_values, merge, concat, fillna, dropna, str.contains, info, describe
+2. 시각화: plotly (scatter, line, bar, histogram, pie), folium, pyvis
+
+═══════════════════════════════════════
+🎨 응답 스타일
+═══════════════════════════════════════
+1. 마크다운과 HTML을 적절히 융합하여 가독성 높은 답변을 작성하세요.
+2. 핵심 단어 강조:
+   - **볼드체**: 중요 개념
+   - <u>밑줄</u>: 학생이 주목해야 할 부분
+   - <span style="color: #e63946;">빨간색</span>: 에러 원인이나 핵심 키워드
+   - \\\`인라인 코드\\\`: 함수명, 변수명 등
+3. 이모지를 자연스럽게 활용하여 친근한 분위기를 만드세요.
+4. 답변 마지막에는 학생의 다음 행동을 유도하는 질문이나 격려를 넣으세요.`;
 
 conversationHistory.push({
     role: "system",
     content: systemInstruction
 });
 
-async function getGPTResponse(message) {
+async function getGPTResponse(message, imageBase64 = null) {
     if (GAS_WEB_APP_URL.includes("여기에_앱스스크립트")) {
         return "GAS Web App URL이 설정되지 않았습니다. 관리자에게 문의하세요.";
     }
 
+    let userContent = message;
+    if (imageBase64) {
+        userContent = [
+            { type: "text", text: message || "이미지에 대해 알려주세요." },
+            { type: "image_url", image_url: { url: imageBase64 } }
+        ];
+    }
+
     conversationHistory.push({
         role: "user",
-        content: message
+        content: userContent
     });
 
     const payload = {
@@ -239,17 +307,65 @@ function appendMessage(text, sender) {
     return messageDiv;
 }
 
+// 이미지 첨부 처리 함수
+function handleImageAttachment(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        attachedImageBase64 = e.target.result;
+        imagePreview.src = attachedImageBase64;
+        imagePreviewContainer.style.display = 'flex';
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    };
+    reader.readAsDataURL(file);
+}
+
+// 이미지 미리보기 초기화 함수
+function clearImagePreview() {
+    attachedImageBase64 = null;
+    imagePreview.src = '';
+    imagePreviewContainer.style.display = 'none';
+}
+
+// 이미지 제거 버튼 클릭 이벤트 등록
+removeImageBtn.addEventListener('click', clearImagePreview);
+
+// 클립보드 붙여넣기(Ctrl+V) 이벤트 핸들러
+window.addEventListener('paste', (e) => {
+    if (appContainer.style.display === 'none') return;
+    
+    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+    for (let index in items) {
+        const item = items[index];
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+            const blob = item.getAsFile();
+            handleImageAttachment(blob);
+            e.preventDefault();
+            break;
+        }
+    }
+});
+
 async function handleSend() {
     const text = userInput.value.trim();
-    if (!text) return;
+    if (!text && !attachedImageBase64) return;
 
-    appendMessage(text, 'user');
+    const userMessageDiv = appendMessage(text, 'user');
+    
+    if (attachedImageBase64) {
+        const img = document.createElement('img');
+        img.src = attachedImageBase64;
+        img.classList.add('chat-image');
+        userMessageDiv.appendChild(img);
+    }
+    
+    const imageToSend = attachedImageBase64;
+    clearImagePreview();
     userInput.value = '';
     
     loadingIndicator.style.display = 'flex';
     chatContainer.scrollTop = chatContainer.scrollHeight;
 
-    const response = await getGPTResponse(text);
+    const response = await getGPTResponse(text, imageToSend);
     
     loadingIndicator.style.display = 'none';
     appendMessage(response, 'ai');
@@ -297,6 +413,14 @@ appContainer.addEventListener('drop', (e) => {
 
 function handleFileUpload(file) {
     const ext = file.name.split('.').pop().toLowerCase();
+    
+    // 이미지 파일 형식 처리
+    if (['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(ext)) {
+        handleImageAttachment(file);
+        fileInput.value = '';
+        return;
+    }
+
     const loadingMsg = appendMessage(`파일 분석 중... (${file.name})`, 'ai');
 
     if (ext === 'csv') {

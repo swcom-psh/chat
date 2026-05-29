@@ -361,6 +361,7 @@ async function handleSend() {
     const imageToSend = attachedImageBase64;
     clearImagePreview();
     userInput.value = '';
+    userInput.style.height = 'auto';
     
     loadingIndicator.style.display = 'flex';
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -372,10 +373,17 @@ async function handleSend() {
 }
 
 sendBtn.addEventListener('click', handleSend);
-userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
+userInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
         handleSend();
     }
+});
+
+// textarea 자동 높이 조절
+userInput.addEventListener('input', () => {
+    userInput.style.height = 'auto';
+    userInput.style.height = Math.min(userInput.scrollHeight, 150) + 'px';
 });
 
 // ==========================================

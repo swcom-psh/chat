@@ -219,12 +219,18 @@ header p {
 #user-input {
     flex: 1;
     padding: 15px;
-    border-radius: 25px;
+    border-radius: 20px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: white;
     font-size: 1rem;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
     outline: none;
     transition: all 0.3s;
+    resize: none;
+    overflow-y: auto;
+    min-height: 48px;
+    max-height: 150px;
+    line-height: 1.5;
 }
 
 #user-input:focus {

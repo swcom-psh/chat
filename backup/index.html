@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>파이썬 판다스 도우미</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Prepaid font for better look -->
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
+</head>
+
+<body>
+    <!-- 구글 로그인 화면 -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-box">
+            <h1> 파이썬 프로그래밍 도우미</h1>
+            <p>강원사대부고 계정으로 로그인해주세요.<br>(@sdhs.gwe.hs.kr)</p>
+            <div id="google-login-btn-container"></div>
+        </div>
+    </div>
+
+    <!-- 메인 앱 화면 (로그인 전에는 숨김) -->
+    <div class="app-container" style="display: none;">
+        <!-- 사이드바 (FAQ) -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>💡 자주 묻는 질문</h3>
+                <p>클릭하면 바로 질문할 수 있어요!</p>
+            </div>
+            <ul class="faq-list">
+                <div class="faq-category">🐼 Pandas 문법</div>
+                <li data-faq-id="faq1">1. 엑셀 불러오는 법 (read_excel)</li>
+                <li data-faq-id="faq2">2. loc와 iloc 활용 (조건 필터링)</li>
+                <li data-faq-id="faq3">3. groupby 쓰는 법</li>
+                <li data-faq-id="faq4">4. mean, min, max 등 통계 쓰는 법</li>
+                <li data-faq-id="faq5">5. 열 추가 및 제목 변경하는 법</li>
+                <li data-faq-id="faq6">6. 결측치(빈칸) 처리 (fillna, dropna)</li>
+                <li data-faq-id="faq7">7. 데이터 정렬하기 (sort_values)</li>
+                <li data-faq-id="faq8">8. 데이터 합치기 (merge, concat)</li>
+                <li data-faq-id="faq9">9. 데이터 요약 확인 (info, describe)</li>
+                <li data-faq-id="faq10">10. 특정 문자가 포함된 데이터 찾기</li>
+
+                <div class="faq-category">📊 Plotly 시각화</div>
+                <li data-faq-id="faq11">11. 산점도 그래프 그리기 (scatter)</li>
+                <li data-faq-id="faq12">12. 선 그래프 그리기 (line)</li>
+                <li data-faq-id="faq13">13. 막대 그래프 그리기 (bar)</li>
+                <li data-faq-id="faq14">14. 히스토그램 그리기 (histogram)</li>
+                <li data-faq-id="faq15">15. 파이 차트 그리기 (pie)</li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <header>
+                <h1>🌊 파이썬 코딩 바다 🏄‍♂️</h1>
+                <p>파도처럼 시원하게 파이썬 고민을 해결해 드려요!</p>
+            </header>
+
+            <div id="drag-overlay" class="drag-overlay">
+                <div class="drag-content">
+                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <h2>여기에 파일을 놓아주세요</h2>
+                    <p>CSV 또는 Excel 파일 지원</p>
+                </div>
+            </div>
+
+
+            <div id="chat-container">
+                <div class="message ai">
+                    안녕하세요! 파이썬 코딩 바다에 오신 것을 환영해요. 🌴<br>
+                    코딩하다 막히는 부분이 있나요? <br>
+                    정답을 바로 알려드리는 대신, 스스로 해결할 수 있도록 도와드릴게요!
+                </div>
+                <div class="typing-indicator" id="loading">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+            </div>
+
+            <!-- 이미지 미리보기 영역 -->
+            <div id="image-preview-container" class="image-preview-container" style="display: none;">
+                <div class="preview-wrapper">
+                    <img id="image-preview" src="" alt="첨부 이미지">
+                    <button id="remove-image-btn" title="이미지 삭제">&times;</button>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <button id="attach-btn" title="파일 첨부 (CSV, 엑셀, 이미지)">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path
+                            d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48">
+                        </path>
+                    </svg>
+                </button>
+                <input type="file" id="file-input" accept=".csv, .xlsx, .xls, .png, .jpg, .jpeg, .gif, .webp" style="display: none;">
+                <textarea id="user-input" placeholder="궁금한 파이썬 문법을 물어보세요... (Shift+Enter: 줄바꿈)" rows="1"></textarea>
+                <button id="send-btn">
+                    <svg viewBox="0 0 24 24">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- 파도 애니메이션 SVG -->
+        <div class="ocean-container">
+            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+                <defs>
+                    <path id="gentle-wave"
+                        d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                </defs>
+                <g class="parallax">
+                    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(0, 180, 216, 0.7)" />
+                    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(0, 119, 182, 0.5)" />
+                    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(3, 4, 94, 0.3)" />
+                    <use xlink:href="#gentle-wave" x="48" y="7" fill="#0077b6" />
+                </g>
+            </svg>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <script src="script.js"></script>
+</body>
+
+</html>

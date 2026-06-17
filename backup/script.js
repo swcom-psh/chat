@@ -2,6 +2,7 @@ const chatContainer = document.getElementById('chat-container');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 const loadingIndicator = document.getElementById('loading');
+const loginScreen = document.getElementById('login-screen');
 const appContainer = document.querySelector('.app-container');
 
 // 이미지 첨부 관련 DOM 및 변수
@@ -13,15 +14,92 @@ let attachedImageBase64 = null;
 // ==========================================
 // ⚙️ 환경 설정 (선생님이 직접 입력해야 하는 부분)
 // ==========================================
-// Google Apps Script - 웹앱 URL
+// 1. Google Cloud - OAuth 클라이언트 ID
+const GOOGLE_CLIENT_ID = "455099474641-0j7codhi77g21tg778s8j54lqb69ple9.apps.googleusercontent.com";
+
+// 2. Google Apps Script - 웹앱 URL
 const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwzeZipzrMKJ3fepJi9oHuMLnwXNaJUH6UDhKMF66J-Z2gEmOlnrqxmSBeFlNeXewupMA/exec";
 
-// 현재 로그인한 사용자 정보 저장 (임시 데모용 게스트 계정)
+// 현재 로그인한 사용자 정보 저장
 let currentUser = {
-    studentId: "guest",
-    name: "게스트",
-    email: "guest@sdhs.gwe.hs.kr"
+    studentId: "",
+    name: "",
+    email: ""
 };
+
+// ==========================================
+// 🔐 구글 로그인 처리
+// ==========================================
+function initGoogleSignIn() {
+    const btnContainer = document.getElementById("google-login-btn-container");
+    if (!btnContainer || typeof google === 'undefined') return;
+
+    // Google Identity Services 초기화
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+        hosted_domain: "sdhs.gwe.hs.kr" // 이 도메인으로만 로그인 제한
+    });
+    google.accounts.id.renderButton(
+        btnContainer,
+        { theme: "outline", size: "large", text: "signin_with" }
+    );
+}
+
+window.onload = function () {
+    if (GOOGLE_CLIENT_ID.includes("여기에_구글_클라이언트_ID를_입력하세요")) {
+        console.warn("구글 로그인 Client ID가 설정되지 않았습니다.");
+    }
+
+    // Google SDK 라이브러리가 이미 로드되어 있으면 즉시 초기화
+    if (typeof google !== 'undefined') {
+        initGoogleSignIn();
+    } else {
+        // 아직 로드 전이라면 로드될 때까지 100ms마다 확인 (레이스 컨디션 해결)
+        const checkGoogleSDK = setInterval(() => {
+            if (typeof google !== 'undefined') {
+                initGoogleSignIn();
+                clearInterval(checkGoogleSDK);
+            }
+        }, 100);
+        // 최대 5초까지만 대기 후 타이머 제거 (안전 장치)
+        setTimeout(() => clearInterval(checkGoogleSDK), 5000);
+    }
+};
+
+// 로그인 성공 시 콜백
+function handleCredentialResponse(response) {
+    const responsePayload = decodeJwtResponse(response.credential);
+
+    // 도메인 검증
+    if (responsePayload.hd !== "sdhs.gwe.hs.kr") {
+        alert("학교 공식 계정(@sdhs.gwe.hs.kr)으로만 접속할 수 있습니다.");
+        google.accounts.id.revoke(responsePayload.email, () => { });
+        return;
+    }
+
+    // 이메일에서 학번 추출
+    const email = responsePayload.email;
+    const studentId = email.split('@')[0];
+    const name = responsePayload.name;
+
+    currentUser = { studentId, name, email };
+
+    // 메인 화면으로 전환
+    loginScreen.style.display = 'none';
+    appContainer.style.display = 'flex';
+
+    appendMessage(`환영합니다, **${name}**(${studentId}) 학생! 👋\n시원한 바다처럼 파이썬 고민을 해결해 드릴게요!`, 'ai');
+}
+
+function decodeJwtResponse(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+}
 
 // ==========================================
 // 🤖 챗봇 기본 로직 (API 키 없음 - 보안 통신)
@@ -402,6 +480,8 @@ removeImageBtn.addEventListener('click', clearImagePreview);
 
 // 클립보드 붙여넣기(Ctrl+V) 이벤트 핸들러
 window.addEventListener('paste', (e) => {
+    if (appContainer.style.display === 'none') return;
+
     const items = (e.clipboardData || e.originalEvent.clipboardData).items;
     for (let index in items) {
         const item = items[index];
@@ -621,7 +701,7 @@ const faqData = {
     },
     faq9: {
         q: "데이터프레임의 전체 행/열 개수, 데이터 타입, 요약 통계 등을 한눈에 확인하는 방법을 알려주세요.",
-        a: "데이터를 처음 불러왔을 때, 어떤 데이터인지 파악하는 기초 함수들입니다! 🔍\n\n### 기본 파악 함수\n- `df.head(5)` : 앞에서부터 5개 행만 살짝 엿보기\n- `df.info()` : 행과 열의 개수, 각 열의 데이터 타입, 결측치 여부 확인\n- `df.describe()` : 숫자형 데이터의 요약 통계(평균, 최소/최대 등) 한눈에 보기\n\n제일 먼저 `df.info()`를 실행해서 데이터를 파악해보는 것을 추천합니다!"
+        a: "데이터를 처음 불러왔을 때, 어떤 데이터인지 파악하는 기초 함수들입니다! 🔍\n\n### 기본 파악 함수\n- `df.head(5)` : 앞에서부터 5개 행만 살짝 엿보기\n- `df.info()` : 행 and 열의 개수, 각 열의 데이터 타입, 결측치 여부 확인\n- `df.describe()` : 요약 통계 한눈에 보기\n\n제일 먼저 `df.info()`를 실행해서 데이터를 파악해보는 것을 추천합니다!"
     },
     faq10: {
         q: "특정 열에서 원하는 문자열이 포함된 데이터만 찾아서 필터링하는 방법을 알려주세요.",

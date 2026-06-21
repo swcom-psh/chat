@@ -14,10 +14,16 @@
 <body>
     <!-- 메인 앱 화면 -->
     <div class="app-container">
+        <!-- 사이드바 오버레이 (모바일용) -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
         <!-- 사이드바 (FAQ) -->
         <div class="sidebar">
             <div class="sidebar-header">
-                <h3>💡 자주 묻는 질문</h3>
+                <div class="sidebar-title-container">
+                    <h3>💡 자주 묻는 질문</h3>
+                    <button id="sidebar-close-btn" class="sidebar-close-btn" title="닫기">&times;</button>
+                </div>
                 <p>클릭하면 바로 질문할 수 있어요!</p>
             </div>
             <ul class="faq-list">
@@ -44,6 +50,7 @@
 
         <div class="main-content">
             <header>
+                <button id="menu-toggle-btn" class="menu-toggle-btn" title="자주 묻는 질문 열기">💡</button>
                 <h1>🌊 파이썬 코딩 바다 🏄‍♂️</h1>
                 <p>파도처럼 시원하게 파이썬 고민을 해결해 드려요!</p>
             </header>

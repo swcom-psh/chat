@@ -4,6 +4,26 @@ const sendBtn = document.getElementById('send-btn');
 const loadingIndicator = document.getElementById('loading');
 const appContainer = document.querySelector('.app-container');
 
+// 모바일 사이드바 관련 DOM 및 제어 함수
+const sidebar = document.querySelector('.sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+const menuToggleBtn = document.getElementById('menu-toggle-btn');
+const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+
+function openSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (sidebarOverlay) sidebarOverlay.classList.add('active');
+}
+
+function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+}
+
+if (menuToggleBtn) menuToggleBtn.addEventListener('click', openSidebar);
+if (sidebarCloseBtn) sidebarCloseBtn.addEventListener('click', closeSidebar);
+if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
 // 이미지 첨부 관련 DOM 및 변수
 const imagePreviewContainer = document.getElementById('image-preview-container');
 const imagePreview = document.getElementById('image-preview');
@@ -675,6 +695,12 @@ faqItems.forEach(item => {
 
             // 모바일 화면일 경우를 대비해 채팅창으로 스크롤 이동
             chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            // 모바일 화면에서는 질문 클릭 시 사이드바를 자동으로 닫아줍니다.
+            if (window.innerWidth <= 768) {
+                closeSidebar();
+            }
         }
     });
 });
+
